@@ -13077,9 +13077,13 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="IR-Risk-in-Multi-curve-environment">IR Risk in Multi-curve environment<a class="anchor-link" href="#IR-Risk-in-Multi-curve-environment">&#182;</a></h1><p>In this demo, I aim to show how easy it is to price and risk a swap in Python with the help of QuantLib. We will see how visualising tabula data using pandas and plotting with matplotlib help us understand what we are doing.</p>
-<p>The goal is the to</p>
-<ol>
+<p>Author: Tony Yum</p>
+<p><a href="https://github.com/jiujitsu-sekai/kinyu-demos">GitHub</a>
+<a href="https://www.linkedin.com/in/tonyyum/">Linkedin</a></p>
+<h1 id="IR-Risk-in-Multi-curve-environment">IR Risk in Multi-curve environment<a class="anchor-link" href="#IR-Risk-in-Multi-curve-environment">&#182;</a></h1><p>Having sat next to some rates trader and seeing the system they use to understand, hedge or profit from their risk, I often thought it would be fun to build that system. Of course the bank has poured millions of dollar into such system so I will not be making a clone. Instead I want to show (what you already know) how powerful and expressive python can be. With a Jupyter notebook I will show how you could build a poor man’s version.</p>
+<p>Not only does it show how little code is required, but it will also show how easy it is in python to visualise your data on each step of the way to your goal.</p>
+<p>I will be using QuantLib for bootstrapping and pricing, Pandas/Matplotlib for visualising tabula and plotting respectively.</p>
+<h2 id="The-steps">The steps<a class="anchor-link" href="#The-steps">&#182;</a></h2><ol>
 <li>Load market data</li>
 <li>Build OIS and 6M curve</li>
 <li>Price a 6 Month Swap</li>
@@ -13109,7 +13113,7 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 
@@ -13257,7 +13261,7 @@ div#notebook {
     <span class="k">if</span> <span class="n">inst_type</span> <span class="o">==</span> <span class="s1">&#39;DATED&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">inst_type</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">inst_type</span> <span class="o">==</span> <span class="s1">&#39;FRA&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">inst_type</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;FRA #</span><span class="si">{row[0]}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">inst_type</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;FRA #</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">inst_type</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">rate</span><span class="p">)</span>
     
@@ -14482,7 +14486,7 @@ We need to define helper for FRA and Swaps</p>
 <span class="n">npv</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="c1"># We confirm that summing the cashflows does reproduce the NPV per calculation by quantlib</span>
 <span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">npv</span> <span class="o">-</span> <span class="n">spot5YearSwap</span><span class="o">.</span><span class="n">NPV</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mf">0.00001</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">npv</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;  NPV = </span><span class="si">{npv:,.0f}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">npv</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;  NPV = </span><span class="si">{</span><span class="n">npv</span><span class="si">:</span><span class="s1">,.0f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cashflow&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -14660,7 +14664,7 @@ sensitivity.</p>
         <span class="k">if</span> <span class="n">market_data_type</span> <span class="o">==</span> <span class="s1">&#39;DATED&#39;</span><span class="p">:</span>
             <span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span> <span class="o">=</span> <span class="n">row</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">market_data_type</span> <span class="o">==</span> <span class="s1">&#39;FRA&#39;</span><span class="p">:</span>
-            <span class="n">start_dt</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;FRA #</span><span class="si">{row[0]}</span><span class="s1">&#39;</span>
+            <span class="n">start_dt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;FRA #</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">end_dt</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">start_dt</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -15097,7 +15101,7 @@ sensitivity.</p>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">swaps</span> <span class="o">=</span> <span class="p">[</span><span class="n">create_swap</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">swaps_data</span><span class="p">]</span>
 <span class="k">class</span> <span class="nc">Portfolio</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span>
 
     <span class="k">def</span> <span class="nf">NPV</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -15756,6 +15760,25 @@ completeness, lets see our risk to funding spread.</p>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2><p>As we can see. It does not take much work to implement a basic risk engine.</p>
+<p>However this is far from what is used in practise. Just to name a few points.</p>
+<ul>
+<li>On a large portfolio we would need to distribute the compute in a cluster</li>
+<li>A dollar bank is likely going to be funded in USD and we need to take XCCY basis swaps into account.</li>
+<li>What we showed is what's call a market ladder where the data points are market data.<ul>
+<li>This is good for hedging and estimating realtime PNL.</li>
+<li>Not good to compare risk accross different curves that uses different instruments to build.</li>
+<li>The market risk team would need to see a standard ladder.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
 </div>
     </div>
   </div>
